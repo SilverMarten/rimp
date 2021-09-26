@@ -1,38 +1,29 @@
-import json
 from urllib.parse import quote_plus
 
 # from bs4 import BeautifulSoup
 import requests
 
-REPL_URL = "https://repl.it/@{name}/{project}"
-LOCATION_URL = "https://repl.it/data/repls/signed_urls/{repl_id}/{file_name}"
-FILE_LIST_URL = "https://repl.it/data/repls/@{user}/{slug}"
-ACCESS_HEADERS = {"origin": "https://repl.it", "Referer": None}
+REPL_URL = "https://replit.com/@{name}/{project}"
+LOCATION_URL = "https://replit.com/data/repls/signed_urls/{repl_id}/{file_name}"
+FILE_LIST_URL = "https://replit.com/data/repls/@{user}/{slug}"
+ACCESS_HEADERS = {"origin": "https://replit.com", "Referer": None}
 
 
 def get_details(name: str, project: str):
-    main_page = requests.get(REPL_URL.format(
-        name=name,
-        project=project
-    ))
-    if main_page.status_code != 200:
-        raise ValueError("Invalid name or project name provided")
-    # soup = BeautifulSoup(main_page.text, features="html.parser").body
-    # script = soup.find_next("script").string.split('\n')[1][26:]
-    # return json.loads(script)
-    text = main_page.text.replace("'",'"')
-    idx1 = text.find("activeReplId")
-    idx2 = text.find(":",idx1)
-    idx4 = text.find('"',idx2)
-    idx5 = text.find('"',idx4+1)
-    repl_id = text[idx4+1:idx5]
-
-    file_list_json = requests.get(
+    file_list_request = requests.get(
         FILE_LIST_URL.format(
             user=name,
             slug=project   
-        )).json()
+        ))
+
+    if file_list_request.status_code != 200:
+        raise ValueError("Invalid name or project name provided")
+
+    file_list_json = file_list_request.json()
+
     file_list = file_list_json['fileNames']
+
+    repl_id = file_list_json['id'];
 
     return {'repl_id':repl_id, 'file_list':file_list}
 
