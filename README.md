@@ -2,6 +2,14 @@
 # rimp
 A hacky project that lets you import repls from https://repl.it into your project
 
+## How to install in Repl.it
+Open the shell and run
+```
+pip install -e git+https://github.com/SilverMarten/rimp.git#egg=rimp
+```
+
+Wow, that was easy wasn't it?
+
 ## How to install
 ```
 pip install rimp
