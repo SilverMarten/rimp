@@ -9,7 +9,7 @@ with open('requirements.txt') as f:
 
 setup(
     name="rimp",
-    version="0.0.0",
+    version="0.0.4",
     description="A hacky project that lets you import repls from https://repl.it into your project",
     long_description=long_desc,
     author="Nathan Zilora",
